@@ -118,9 +118,13 @@ int snd_soc_cache_read(struct snd_soc_codec *codec,
 		return -EINVAL;
 
 	mutex_lock(&codec->cache_rw_mutex);
-	if (!ZERO_OR_NULL_PTR(codec->reg_cache))
+	if (!ZERO_OR_NULL_PTR(codec->reg_cache)) {
 		*value = snd_soc_get_cache_val(codec->reg_cache, reg,
 					       codec->driver->reg_word_size);
+	} else {
+		mutex_unlock(&codec->cache_rw_mutex);
+		return -EINVAL;
+	}
 	mutex_unlock(&codec->cache_rw_mutex);
 
 	return 0;

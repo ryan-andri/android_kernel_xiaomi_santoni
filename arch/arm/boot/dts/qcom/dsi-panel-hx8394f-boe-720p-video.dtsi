@@ -124,6 +124,7 @@
 		qcom,mdss-pan-physical-height-dimension = <110>;
 		qcom,mdss-dsi-lp11-init;
 		qcom,mdss-dsi-init-delay-us = <50000>;
+		qcom,mdss-night-brightness = <7 25 45 67>;
 		qcom,mdss-dsi-tx-eot-append;
 	};
 };

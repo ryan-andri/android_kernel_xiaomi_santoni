@@ -805,7 +805,7 @@
 		qcom,mdss-dsi-lp11-init;
 		qcom,mdss-dsi-init-delay-us = <20000>;
 		qcom,mdss-dsi-reset-sequence = <1 5>, <0 10>, <1 80>;
-
+		qcom,mdss-night-brightness = <8 26 46 68>;
 		qcom,esd-check-enabled;
 
 		qcom,mdss-dsi-panel-status-command = [06 01 00 01 05 00 02 0A 08

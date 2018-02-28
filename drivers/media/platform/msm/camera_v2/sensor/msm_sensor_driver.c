@@ -1,4 +1,5 @@
 /* Copyright (c) 2013-2017, The Linux Foundation. All rights reserved.
+ * Copyright (C) 2018 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -17,6 +18,7 @@
 #include "camera.h"
 #include "msm_cci.h"
 #include "msm_camera_dt_util.h"
+#include <linux/hardware_info.h>
 
 /* Logging macro */
 #undef CDBG
@@ -677,6 +679,27 @@ static void msm_sensor_fill_sensor_info(struct msm_sensor_ctrl_t *s_ctrl,
 	strlcpy(entity_name, s_ctrl->msm_sd.sd.entity.name, MAX_SENSOR_NAME);
 }
 
+extern int main_module_id;
+extern int sub_module_id;
+static const char *module_info[] = {
+	"Unkonw",
+	"Sunny",
+	"Huaquan",
+	"Fushikang",
+	"Guangzhen",
+	"Daling",
+	"Xinli",
+	"O-film",
+	"Boyi",
+	"Sanglaishi",
+	"Qunhui",
+	"Q-Tech",
+	"Unknow",
+	"Unknow",
+	"Unknow",
+	"Unknow",
+};
+
 /* static function definition */
 int32_t msm_sensor_driver_probe(void *setting,
 	struct msm_sensor_info_t *probed_info, char *entity_name)
@@ -1022,6 +1045,19 @@ CSID_TG:
 	s_ctrl->sensordata->cam_slave_info = slave_info;
 
 	msm_sensor_fill_sensor_info(s_ctrl, probed_info, entity_name);
+
+	hardwareinfo_set_prop(probed_info->position == BACK_CAMERA_B
+			? HARDWARE_BACK_CAM:HARDWARE_FRONT_CAM, probed_info->sensor_name);
+	if (main_module_id > 0)  {
+		hardwareinfo_set_prop(HARDWARE_BACK_CAM_MOUDULE_ID, module_info[main_module_id]);
+	} else {
+		hardwareinfo_set_prop(HARDWARE_BACK_CAM_MOUDULE_ID, module_info[0]);
+	}
+	if (sub_module_id > 0)  {
+		hardwareinfo_set_prop(HARDWARE_FRONT_CAM_MOUDULE_ID, module_info[sub_module_id]);
+	} else{
+		hardwareinfo_set_prop(HARDWARE_FRONT_CAM_MOUDULE_ID, module_info[0]);
+	}
 
 	/*
 	 * Set probe succeeded flag to 1 so that no other camera shall

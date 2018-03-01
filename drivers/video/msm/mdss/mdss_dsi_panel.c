@@ -22,6 +22,7 @@
 #include <linux/qpnp/pwm.h>
 #include <linux/err.h>
 #include <linux/string.h>
+#include <linux/hardware_info.h>
 
 #include "mdss_dsi.h"
 #include "mdss_debug.h"
@@ -33,6 +34,8 @@
 #define DEFAULT_MDP_TRANSFER_TIME 14000
 
 #define VSYNC_DELAY msecs_to_jiffies(17)
+
+extern char Lcm_name[HARDWARE_MAX_ITEM_LONGTH];
 
 DEFINE_LED_TRIGGER(bl_led_trigger);
 
@@ -2860,9 +2863,11 @@ int mdss_dsi_panel_init(struct device_node *node,
 	if (!panel_name) {
 		pr_info("%s:%d, Panel name not specified\n",
 						__func__, __LINE__);
+		strcpy(Lcm_name, "");
 	} else {
 		pr_info("%s: Panel Name = %s\n", __func__, panel_name);
 		strlcpy(&pinfo->panel_name[0], panel_name, MDSS_MAX_PANEL_LEN);
+		strcpy(Lcm_name, panel_name);
 	}
 	rc = mdss_panel_parse_dt(node, ctrl_pdata);
 	if (rc) {

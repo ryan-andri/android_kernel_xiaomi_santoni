@@ -40,7 +40,11 @@
 	qcom,battery-data = <&qrd_batterydata>;
 	qcom,float-voltage-mv = <4400>;
 	qcom,chg-inhibit-fg;
-	qcom,thermal-mitigation = <2000 1500 1200 700 0>;
+	qcom,fastchg-current-comp = <1200>;
+	qcom,float-voltage-comp = <16>; /* need change to 16 if float-voltage change to 4.4 */
+	qcom,thermal-mitigation = <3000 1200 600 0>;
+	qcom,iterm-ma = <200>;
+	qcom,override-usb-current;
 	status = "okay";
 	qcom,vchg_sns-vadc = <&pmi8950_vadc>;
 	qcom,vchg-adc-channel-id = <3>;

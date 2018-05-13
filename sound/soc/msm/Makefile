@@ -53,3 +53,7 @@ obj-$(CONFIG_SND_SOC_AW87319) += AW87319_Audio_M.o
 # for MDM9640 sound card driver
 snd-soc-mdm9640-objs := mdm9640.o
 obj-$(CONFIG_SND_SOC_MDM9640) += snd-soc-mdm9640.o
+
+ifeq ($(cc-name),clang)
+CFLAGS_msm-audio-pinctrl.o += $(call cc-disable-warning,strlcpy-strlcat-size,)
+endif

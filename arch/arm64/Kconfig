@@ -316,6 +316,11 @@ config ARCH_MSM8940
 	  This enables support for the MSM8940 chipset. If you don't
 	  know what to do here, say N
 
+config ARCH_MSM8940_XIAOMI_SANTONI
+	bool "Enable Support for XIAOMI Redmi 4X Santoni"
+	depends on ARCH_MSM8940
+	default n
+
 config ARCH_MSM8953
 	bool "Enable Support for Qualcomm Technologies Inc MSM8953"
 	depends on ARCH_MSM

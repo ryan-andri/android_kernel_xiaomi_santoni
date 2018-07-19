@@ -31,16 +31,12 @@
 #define ADJUST_NUM 15
 #define JUSTTIMES 6
 #define JUST_DELAY 6
-
 #define HRTIME_JUST_DELAY 9000
-
-
 
 #ifndef USE_HRTIMER_SIMULATION
 static s64 dealt = 0;
 #else
 static s64 adjust_dealt = 0;
-
 #endif
 
 static DEFINE_SPINLOCK(infrared_lock);
@@ -75,7 +71,6 @@ struct gpio_led_data {
 
 struct mutex ir_lock;
 
-
 #if defined (WT_USE_FAN54015)
 extern int fan54015_getcharge_stat(void);
 #endif
@@ -90,9 +85,10 @@ static void gpio_led_work(struct work_struct *work)
 						 led_dat->new_level,
 						 NULL, NULL);
 		led_dat->blinking = 0;
-	} else
+	} else {
 		gpio_set_value_cansleep(led_dat->gpio, led_dat->new_level);
-		 printk("infr has been end");
+		printk("infr has been end");
+	}
 }
 
 static void gpio_led_set(struct led_classdev *led_cdev,
@@ -101,6 +97,7 @@ static void gpio_led_set(struct led_classdev *led_cdev,
 	struct gpio_led_data *led_dat =
 		container_of(led_cdev, struct gpio_led_data, cdev);
 	int level, ret = 0;
+
 	printk("infr has been start");
 	if (value == LED_OFF)
 		level = 0;
@@ -122,12 +119,11 @@ static void gpio_led_set(struct led_classdev *led_cdev,
 			led_dat->platform_gpio_blink_set(led_dat->gpio, level,
 							 NULL, NULL);
 			led_dat->blinking = 0;
-		} else
+		} else {
 			ret = gpio_direction_output(led_dat->gpio, level);
-			if (ret) {
+			if (ret)
 				printk("infrared unable to set dir for gpio [%d]\n", led_dat->gpio);
-			}
-
+		}
 	}
 }
 
@@ -158,7 +154,6 @@ static s64 hrtime_adjust(struct gpio_ir_tx_packet *gpkt)
 	unsigned long flags;
 
 	spin_lock_irqsave(&infrared_lock, flags);
-
 	now = ktime_to_ns(ktime_get());
 	for (i = 0; i < ADJUST_NUM; i++)  {
 		gpio_ir_tx_set(gpkt, false);
@@ -172,7 +167,6 @@ static enum hrtimer_restart gpio_ir_tx_timer(struct hrtimer *timer)
 {
 	s64 delay_ns = 0, dealt_t = 0;
 	ktime_t start = ktime_get();
-
 	struct gpio_ir_tx_packet *gpkt = container_of(timer, struct gpio_ir_tx_packet, timer);
 	enum hrtimer_restart restart = HRTIMER_RESTART;
 
@@ -183,22 +177,15 @@ static enum hrtimer_restart gpio_ir_tx_timer(struct hrtimer *timer)
 			delay_ns = gpkt->buffer[gpkt->next++] * NSEC_PER_USEC;
 		} else if (!gpkt->pulse || !gpkt->space) {
 			gpio_ir_tx_set(gpkt, true);
-
-
 			delay_ns = gpkt->buffer[gpkt->next++] * NSEC_PER_USEC;
 		} else {
-
 			unsigned int usecs;
 
 			usecs = gpkt->on ? gpkt->pulse : gpkt->space;
 			usecs = min(usecs, gpkt->buffer[gpkt->next]);
 
 			gpio_ir_tx_set(gpkt, gpkt->on);
-
-
-
 			delay_ns = usecs * NSEC_PER_USEC;
-
 			gpkt->buffer[gpkt->next] -= usecs;
 			gpkt->on = !gpkt->on;
 
@@ -240,14 +227,9 @@ static int gpio_ir_tx_transmit_with_timer(struct gpio_ir_tx_packet *gpkt)
 	hrtimer_init(&gpkt->timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL_PINNED);
 	gpkt->timer.function = gpio_ir_tx_timer;
 
-
-
-
 	hrtimer = hrtimer_is_hres_active(&gpkt->timer);
-
-	if (!hrtimer)  {
+	if (!hrtimer)
 		printk("unable to use High-Resolution timer\n");
-	}
 
 	hrtimer_start(&gpkt->timer, ns_to_ktime(0), HRTIMER_MODE_REL_PINNED);
 
@@ -268,7 +250,6 @@ static s64 time_adjust(struct gpio_ir_tx_packet *gpkt)
 	unsigned long flags;
 
 	spin_lock_irqsave(&infrared_lock, flags);
-
 	now = ktime_to_us(ktime_get());
 	for (i = 0; i < ADJUST_NUM; i++)  {
 		gpio_ir_tx_set(gpkt, false);
@@ -283,11 +264,8 @@ static long pwm_ir_tx_work(void *arg)
 	struct gpio_ir_tx_packet *gpkt = arg;
 	unsigned long flags;
 
-
 	spin_lock_irqsave(&infrared_lock, flags);
 	for (; gpkt->next < gpkt->length; gpkt->next++) {
-
-
 		if (gpkt->next & 0x01) {
 			gpio_ir_tx_set(gpkt, false);
 			if (gpkt->buffer[gpkt->next] >= dealt)
@@ -312,9 +290,7 @@ static long pwm_ir_tx_work(void *arg)
 			}
 		}
 	}
-
 	gpio_ir_tx_set(gpkt, false);
-
 	spin_unlock_irqrestore(&infrared_lock, flags);
 
 	return gpkt->next ? : -ERESTARTSYS;
@@ -322,8 +298,6 @@ static long pwm_ir_tx_work(void *arg)
 
 static int gpio_ir_tx_transmit_with_delay(struct gpio_ir_tx_packet *gpkt)
 {
-
-
 	int cpu, rc = -ENODEV;
 	int try_again = JUSTTIMES;
 
@@ -338,25 +312,17 @@ static int gpio_ir_tx_transmit_with_delay(struct gpio_ir_tx_packet *gpkt)
 	if (dealt > JUST_DELAY)
 		goto out;
 
-
-
-
-
 	for_each_online_cpu(cpu) {
-
 		if (cpu != 0) {
 			rc = work_on_cpu(cpu, pwm_ir_tx_work, gpkt);
 			break;
 		}
 	}
 
-	if (rc == -ENODEV) {
+	if (rc == -ENODEV)
 		pr_warn("pwm-ir: can't ron on the auxilliary cpu\n");
 
-	}
-
 	return rc;
-
 out:
 	printk("jeft cpu too low infrared send fail dealt =%lld\n", dealt);
 	return rc;
@@ -377,12 +343,10 @@ static ssize_t transmit_store(struct device *dev,
 	int *temp_buf = (int*)buf;
 	int rc = 0;
 	u32 carrier, period;
-
 	struct gpio_ir_tx_packet gpkt = {};
 	struct led_classdev *led_cdev = dev_get_drvdata(dev);
 	struct gpio_led_data *led_dat =
 			container_of(led_cdev, struct gpio_led_data, cdev);
-
 
 	mutex_lock(&ir_lock);
 
@@ -401,14 +365,12 @@ static ssize_t transmit_store(struct device *dev,
 #if defined(USE_HRTIMER_SIMULATION)
 	rc = gpio_ir_tx_transmit_with_timer(&gpkt);
 #else
-	if (gpkt.high_active)  {
+	if (gpkt.high_active)
 		gpio_direction_output(gpkt.gpio_nr, 0);
-	}
+
 	rc = gpio_ir_tx_transmit_with_delay(&gpkt);
 #endif
 	pm_qos_update_request(&infrared_qos_req, PM_QOS_DEFAULT_VALUE);
-
-
 	mutex_unlock(&ir_lock);
 
 	return rc;
@@ -433,6 +395,7 @@ static int create_gpio_led(const struct gpio_led *template,
 				template->gpio, template->name);
 		return 0;
 	}
+
 	ret = devm_gpio_request(parent, template->gpio, template->name);
 	if (ret < 0)
 		return ret;
@@ -443,16 +406,21 @@ static int create_gpio_led(const struct gpio_led *template,
 	led_dat->can_sleep = gpio_cansleep(template->gpio);
 	led_dat->active_low = template->active_low;
 	led_dat->blinking = 0;
+
 	if (blink_set) {
 		led_dat->platform_gpio_blink_set = blink_set;
 		led_dat->cdev.blink_set = gpio_blink_set;
 	}
+
 	led_dat->cdev.brightness_set = gpio_led_set;
+
 	if (template->default_state == LEDS_GPIO_DEFSTATE_KEEP)
 		state = !!gpio_get_value_cansleep(led_dat->gpio) ^ led_dat->active_low;
 	else
 		state = (template->default_state == LEDS_GPIO_DEFSTATE_ON);
+
 	led_dat->cdev.brightness = state ? LED_FULL : LED_OFF;
+
 	if (!template->retain_state_suspended)
 		led_dat->cdev.flags |= LED_CORE_SUSPENDRESUME;
 
@@ -476,10 +444,8 @@ static int create_gpio_led(const struct gpio_led *template,
 	if (ret < 0)
 		return ret;
 
-	if (strcmp(led_dat->cdev.name, "infrared") == 0) {
+	if (strcmp(led_dat->cdev.name, "infrared") == 0)
 		device_create_file(led_dat->cdev.dev, &dev_attr_transmit);
-	}
-
 
 	return 0;
 }
@@ -516,9 +482,10 @@ static struct gpio_leds_priv *gpio_leds_create_of(struct platform_device *pdev)
 	if (!count)
 		return ERR_PTR(-ENODEV);
 
-	for_each_child_of_node(np, child)
+	for_each_child_of_node(np, child) {
 		if (of_get_gpio(child, 0) == -EPROBE_DEFER)
 			return ERR_PTR(-EPROBE_DEFER);
+	}
 
 	priv = devm_kzalloc(&pdev->dev, sizeof_gpio_leds_priv(count),
 			GFP_KERNEL);
@@ -535,6 +502,7 @@ static struct gpio_leds_priv *gpio_leds_create_of(struct platform_device *pdev)
 		led.name = of_get_property(child, "label", NULL) ? : child->name;
 		led.default_trigger =
 			of_get_property(child, "linux,default-trigger", NULL);
+
 		state = of_get_property(child, "default-state", NULL);
 		if (state) {
 			if (!strcmp(state, "keep"))
@@ -558,10 +526,10 @@ static struct gpio_leds_priv *gpio_leds_create_of(struct platform_device *pdev)
 	}
 
 	return priv;
-
 err:
 	for (count = priv->num_leds - 2; count >= 0; count--)
 		delete_gpio_led(&priv->leds[count]);
+
 	return ERR_PTR(-ENODEV);
 }
 

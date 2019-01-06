@@ -1036,16 +1036,18 @@ CSID_TG:
 
 	hardwareinfo_set_prop(probed_info->position == BACK_CAMERA_B
 			? HARDWARE_BACK_CAM:HARDWARE_FRONT_CAM, probed_info->sensor_name);
-	if (main_module_id > 0)  {
+
+	/* back camera */
+	if (main_module_id > 0)
 		hardwareinfo_set_prop(HARDWARE_BACK_CAM_MOUDULE_ID, module_info[main_module_id]);
-	} else {
+	else
 		hardwareinfo_set_prop(HARDWARE_BACK_CAM_MOUDULE_ID, module_info[0]);
-	}
-	if (sub_module_id > 0)  {
+
+	/* front camera */
+	if (sub_module_id > 0)
 		hardwareinfo_set_prop(HARDWARE_FRONT_CAM_MOUDULE_ID, module_info[sub_module_id]);
-	} else{
+	else
 		hardwareinfo_set_prop(HARDWARE_FRONT_CAM_MOUDULE_ID, module_info[0]);
-	}
 
 	/*
 	 * Set probe succeeded flag to 1 so that no other camera shall

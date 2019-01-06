@@ -1675,8 +1675,6 @@ static int msm_eeprom_platform_probe(struct platform_device *pdev)
 		&eb_info->eeprom_name);
 	CDBG("%s qcom,eeprom-name %s, rc %d\n", __func__,
 		eb_info->eeprom_name, rc);
-	printk("%s qcom,eeprom-name %s, rc %d\n", __func__,
-			eb_info->eeprom_name, rc);
 	if (rc < 0) {
 		pr_err("%s failed %d\n", __func__, __LINE__);
 		e_ctrl->userspace_probe = 1;
@@ -1733,216 +1731,143 @@ static int msm_eeprom_platform_probe(struct platform_device *pdev)
 			CDBG("memory_data[%d] = 0x%X\n", j,
 				e_ctrl->cal_data.mapdata[j]);
 
+		/* Get sensor id for back camera */
 		if (!strcmp(eb_info->eeprom_name, "s5k3l8_ofilm")) {
-			CDBG("match id for s5k3l8_ofilm\n");
-			if (e_ctrl->cal_data.mapdata[0] == 0x55)  {
+			if (e_ctrl->cal_data.mapdata[0] == 0x55)
 				module_id = e_ctrl->cal_data.mapdata[1] & 0x1f;
-			}  else{
+			else
 				module_id = -1;
-			}
-			printk("match id for s5k3l8_ofilm module_id=%d\n", module_id);
-			if (module_id == 7) {
-				CDBG("match id for s5k3l8_ofilm success\n");
+
+			if (module_id == 7)
 				main_module_id = module_id;
-			} else {
-				pr_err("%s match id for s5k3l8_ofilm failed\n", __func__);
-			}
-		}  else if (!strcmp(eb_info->eeprom_name, "s5k3l8_ofilm_riva")) {
-			CDBG("match id for s5k3l8_ofilm_riva\n");
-			if (e_ctrl->cal_data.mapdata[0] == 0x55)  {
+		} else if (!strcmp(eb_info->eeprom_name, "s5k3l8_ofilm_riva")) {
+			if (e_ctrl->cal_data.mapdata[0] == 0x55)
 				module_id = e_ctrl->cal_data.mapdata[1] & 0x1f;
-			}  else{
+			else
 				module_id = -1;
-			}
-			printk("match id for s5k3l8_ofilm_riva module_id=%d\n", module_id);
-			if (module_id == 7) {
-				CDBG("match id for s5k3l8_ofilm_riva success\n");
+
+			if (module_id == 7)
 				main_module_id = module_id;
-			} else {
-				pr_err("%s match id for s5k3l8_ofilm_riva failed\n", __func__);
-			}
 		} else if (!strcmp(eb_info->eeprom_name, "s5k3l8_sunny")) {
-			CDBG("match id for s5k3l8_sunny\n");
-			if (e_ctrl->cal_data.mapdata[0] == 0x55)  {
+			if (e_ctrl->cal_data.mapdata[0] == 0x55)
 				module_id = e_ctrl->cal_data.mapdata[1] & 0x1f;
-			}  else{
+			else
 				module_id = -1;
-			}
-			printk("match id for s5k3l8_sunny module_id=%d\n", module_id);
-			if (module_id == 1) {
-				CDBG("match id for s5k3l8_sunny success\n");
+
+			if (module_id == 1)
 				main_module_id = module_id;
-			} else {
-				pr_err("%s match id for s5k3l8_sunny failed\n", __func__);
-			}
-		}  else if (!strcmp(eb_info->eeprom_name, "ov13855_qtech")) {
-			CDBG("match id for ov13855_qtech\n");
-			if (e_ctrl->cal_data.mapdata[0] == 0x55)  {
+		} else if (!strcmp(eb_info->eeprom_name, "ov13855_qtech")) {
+			if (e_ctrl->cal_data.mapdata[0] == 0x55)
 				module_id = e_ctrl->cal_data.mapdata[1] & 0x1f;
-			}  else{
+			else
 				module_id = -1;
-			}
-			printk("match id for ov13855_qtech module_id=%d\n", module_id);
-			if (module_id == 11) {
+
+			if (module_id == 11)
 				CDBG("match id for ov13855_qtech success\n");
 				main_module_id = module_id;
-			} else {
-				pr_err("%s match id for ov13855_qtech failed\n", __func__);
-			}
 		} else if (!strcmp(eb_info->eeprom_name, "ov13855_sunny")) {
-			CDBG("match id for ov13855_sunny\n");
-			if (e_ctrl->cal_data.mapdata[0] == 0x55)  {
+			if (e_ctrl->cal_data.mapdata[0] == 0x55)
 				module_id = e_ctrl->cal_data.mapdata[1] & 0x1f;
-			}  else{
+			else
 				module_id = -1;
-			}
-			printk("match id for ov13855_sunny module_id=%d\n", module_id);
-			if (module_id == 1) {
-				CDBG("match id for ov13855_sunny success\n");
+
+			if (module_id == 1)
 				main_module_id = module_id;
-			} else {
-				pr_err("%s match id for ov13855_sunny failed\n", __func__);
-			}
-		}  else if (!strcmp(eb_info->eeprom_name, "ov13850")) {
-			CDBG("match id for ov13850\n");
-			if (e_ctrl->cal_data.mapdata[0] == 0x55)  {
+		} else if (!strcmp(eb_info->eeprom_name, "ov13850")) {
+			if (e_ctrl->cal_data.mapdata[0] == 0x55)
 				module_id = e_ctrl->cal_data.mapdata[1] & 0x1f;
-			}  else{
+			else
 				module_id = -1;
-			}
-			printk("match id for ov13850 module_id=%d\n", module_id);
-			if (module_id == 1) {
-				CDBG("match id for ov13850 success\n");
+
+			if (module_id == 1)
 				main_module_id = module_id;
-			} else {
-				pr_err("%s match id for ov13850 failed\n", __func__);
-			}
-		}  else if (!strcmp(eb_info->eeprom_name, "s5k3l2")) {
-			CDBG("match id for s5k3l2\n");
-			if (e_ctrl->cal_data.mapdata[0] == 0x55)  {
+		} else if (!strcmp(eb_info->eeprom_name, "s5k3l2")) {
+			if (e_ctrl->cal_data.mapdata[0] == 0x55)
 				module_id = e_ctrl->cal_data.mapdata[1] & 0x1f;
-			}  else{
+			else
 				module_id = -1;
-			}
-			printk("match id for s5k3l2 module_id=%d\n", module_id);
-			if (module_id == 7) {
-				CDBG("match id for s5k3l2 success\n");
+
+			if (module_id == 7)
 				main_module_id = module_id;
-			} else {
-				pr_err("%s match id for s5k3l2 failed\n", __func__);
-			}
-		}  else if (!strcmp(eb_info->eeprom_name, "ov5675_ofilm")) {
-			CDBG("match id for ov5675_ofilm\n");
-			if (e_ctrl->cal_data.mapdata[16] == 0x55) {
+		} else
+			CDBG("back camera id not found.\n");
+
+		/* Get sensor id for front camera */
+		if (!strcmp(eb_info->eeprom_name, "ov5675_ofilm")) {
+			if (e_ctrl->cal_data.mapdata[16] == 0x55)
 				module_id = e_ctrl->cal_data.mapdata[17] & 0x1f;
-			} else if (e_ctrl->cal_data.mapdata[8] == 0x55) {
+			else if (e_ctrl->cal_data.mapdata[8] == 0x55)
 				module_id = e_ctrl->cal_data.mapdata[9] & 0x1f;
-			} else if (e_ctrl->cal_data.mapdata[0] == 0x55) {
+			else if (e_ctrl->cal_data.mapdata[0] == 0x55)
 				module_id = e_ctrl->cal_data.mapdata[1] & 0x1f;
-			} else {
+			else
 				module_id = -1;
-			}
-			printk("match id for ov5675_ofilm module_id=%d\n", module_id);
-			if (module_id == 7) {
-				CDBG("match id for ov5670_ofilm success\n");
+
+			if (module_id == 7)
 				sub_module_id = module_id;
-			} else {
-				pr_err("%s match id for ov5670_ofilm failed\n", __func__);
-			}
 		} else if (!strcmp(eb_info->eeprom_name, "s5k5e8_sunny")) {
 			CDBG("match id for s5k5e8_sunny\n");
-			if (e_ctrl->cal_data.mapdata[16] == 0x55) {
+			if (e_ctrl->cal_data.mapdata[16] == 0x55)
 				module_id = e_ctrl->cal_data.mapdata[17] & 0x1f;
-			} else if (e_ctrl->cal_data.mapdata[8] == 0x55) {
+			else if (e_ctrl->cal_data.mapdata[8] == 0x55)
 				module_id = e_ctrl->cal_data.mapdata[9] & 0x1f;
-			} else if (e_ctrl->cal_data.mapdata[0] == 0x55) {
+			else if (e_ctrl->cal_data.mapdata[0] == 0x55)
 				module_id = e_ctrl->cal_data.mapdata[1] & 0x1f;
-			} else {
+			else
 				module_id = -1;
-			}
-			printk("match id for s5k5e8_sunny module_id=%d\n", module_id);
-			if (module_id == 1) {
-				CDBG("match id for s5k5e8_sunny success\n");
+
+			if (module_id == 1)
 				sub_module_id = module_id;
-			} else {
-				pr_err("%s match id for s5k5e8_sunny failed\n", __func__);
-			}
-		}  else if (!strcmp(eb_info->eeprom_name, "s5k5e8_ofilm_riva")) {
-			CDBG("match id for s5k5e8_ofilm_riva\n");
-			if (e_ctrl->cal_data.mapdata[16] == 0x55) {
+		} else if (!strcmp(eb_info->eeprom_name, "s5k5e8_ofilm_riva")) {
+			if (e_ctrl->cal_data.mapdata[16] == 0x55)
 				module_id = e_ctrl->cal_data.mapdata[17] & 0x1f;
-			} else if (e_ctrl->cal_data.mapdata[8] == 0x55) {
+			else if (e_ctrl->cal_data.mapdata[8] == 0x55)
 				module_id = e_ctrl->cal_data.mapdata[9] & 0x1f;
-			} else if (e_ctrl->cal_data.mapdata[0] == 0x55) {
+			else if (e_ctrl->cal_data.mapdata[0] == 0x55)
 				module_id = e_ctrl->cal_data.mapdata[1] & 0x1f;
-			} else {
+			else
 				module_id = -1;
-			}
-			printk("match id for s5k5e8_ofilm_riva module_id=%d\n", module_id);
-			if (module_id == 7) {
-				CDBG("match id for s5k5e8_ofilm_riva success\n");
+
+			if (module_id == 7)
 				sub_module_id = module_id;
-			} else {
-				pr_err("%s match id for s5k5e8_ofilm_riva failed\n", __func__);
-			}
-		}  else if (!strcmp(eb_info->eeprom_name, "ov5675")) {
-			CDBG("match id for ov5675\n");
-			if (e_ctrl->cal_data.mapdata[16] == 0x55) {
+		} else if (!strcmp(eb_info->eeprom_name, "ov5675")) {
+			if (e_ctrl->cal_data.mapdata[16] == 0x55)
 				module_id = e_ctrl->cal_data.mapdata[17] & 0x1f;
-			} else if (e_ctrl->cal_data.mapdata[8] == 0x55) {
+			else if (e_ctrl->cal_data.mapdata[8] == 0x55)
 				module_id = e_ctrl->cal_data.mapdata[9] & 0x1f;
-			} else if (e_ctrl->cal_data.mapdata[0] == 0x55) {
+			else if (e_ctrl->cal_data.mapdata[0] == 0x55)
 				module_id = e_ctrl->cal_data.mapdata[1] & 0x1f;
-			} else {
+			else
 				module_id = -1;
-			}
-			printk("match id for ov5675 module_id=%d\n", module_id);
-			if (module_id == 1) {
-				CDBG("match id for ov5675 success\n");
+
+			if (module_id == 1)
 				sub_module_id = module_id;
-			} else {
-				pr_err("%s match id for ov5670 failed\n", __func__);
-			}
-		}  else if (!strcmp(eb_info->eeprom_name, "s5k5e8_qtech_riva")) {
-			CDBG("match id for s5k5e8_qtech_riva\n");
-			if (e_ctrl->cal_data.mapdata[16] == 0x55) {
+		} else if (!strcmp(eb_info->eeprom_name, "s5k5e8_qtech_riva")) {
+			if (e_ctrl->cal_data.mapdata[16] == 0x55)
 				module_id = e_ctrl->cal_data.mapdata[17] & 0x1f;
-			} else if (e_ctrl->cal_data.mapdata[8] == 0x55) {
+			else if (e_ctrl->cal_data.mapdata[8] == 0x55)
 				module_id = e_ctrl->cal_data.mapdata[9] & 0x1f;
-			} else if (e_ctrl->cal_data.mapdata[0] == 0x55) {
+			else if (e_ctrl->cal_data.mapdata[0] == 0x55)
 				module_id = e_ctrl->cal_data.mapdata[1] & 0x1f;
-			} else {
+			else
 				module_id = -1;
-			}
-			printk("match id for s5k5e8_qtech_riva module_id=%d\n", module_id);
-			if (module_id == 11) {
-				CDBG("match id for s5k5e8_qtech_riva success\n");
+
+			if (module_id == 11)
 				sub_module_id = module_id;
-			} else {
-				pr_err("%s match id for s5k5e8_qtech_riva failed\n", __func__);
-			}
-		}  else if (!strcmp(eb_info->eeprom_name, "s5k5e8")) {
-			CDBG("match id for s5k5e8\n");
-			if (e_ctrl->cal_data.mapdata[16] == 0x55) {
+		} else if (!strcmp(eb_info->eeprom_name, "s5k5e8")) {
+			if (e_ctrl->cal_data.mapdata[16] == 0x55)
 				module_id = e_ctrl->cal_data.mapdata[17] & 0x1f;
-			} else if (e_ctrl->cal_data.mapdata[8] == 0x55) {
+			else if (e_ctrl->cal_data.mapdata[8] == 0x55)
 				module_id = e_ctrl->cal_data.mapdata[9] & 0x1f;
-			} else if (e_ctrl->cal_data.mapdata[0] == 0x55) {
+			else if (e_ctrl->cal_data.mapdata[0] == 0x55)
 				module_id = e_ctrl->cal_data.mapdata[1] & 0x1f;
-			} else {
+			else
 				module_id = -1;
-			}
-			printk("match id for s5k5e8 module_id=%d\n", module_id);
-			if (module_id == 7) {
-				CDBG("match id for s5k5e8 success\n");
+
+			if (module_id == 7)
 				sub_module_id = module_id;
-			} else {
-				pr_err("%s match id for s5k5e8 failed\n", __func__);
-			}
-		}  else {
-			pr_err("%s eeprom name match failed\n", __func__);
-		}
-		CDBG("%s eeprom module id: main_module_id=%d  sub_module_id=%d\n", __func__, main_module_id, sub_module_id);
+		} else
+			CDBG("front camera id not found.\n");
 
 		e_ctrl->is_supported |= msm_eeprom_match_crc(&e_ctrl->cal_data);
 

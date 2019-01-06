@@ -411,7 +411,6 @@ static struct i2c_driver aw87319_i2c_driver = {
 static int __init aw87319_pa_init(void)
 {
 	int ret;
-	printk("%s Enter\n", __func__);
 
 	ret = i2c_add_driver(&aw87319_i2c_driver);
 	if (ret) {
@@ -423,7 +422,6 @@ static int __init aw87319_pa_init(void)
 
 static void __exit aw87319_pa_exit(void)
 {
-	printk("%s Enter\n", __func__);
 	i2c_del_driver(&aw87319_i2c_driver);
 }
 

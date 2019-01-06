@@ -790,8 +790,6 @@ static int msm8952_enable_dig_cdc_clk(struct snd_soc_codec *codec,
 static void msm8952_ext_hs_control(u32 enable)
 {
 	gpio_direction_output(headset_gpio, enable);
-	 pr_err("%s: %s [hjf]  headset 111PAs.\n", __func__,
-	 enable ? "Enable" : "Disable");
 }
 static void msm8952_ext_spk_control(u32 enable)
 {
@@ -809,9 +807,6 @@ static void msm8952_ext_spk_control(u32 enable)
 		usleep_range(EXT_CLASS_D_DIS_DELAY,
 				EXT_CLASS_D_DIS_DELAY + EXT_CLASS_D_DELAY_DELTA);
 	}
-
-	pr_err("%s: %s [hjf]  external speaker 222PAs.\n", __func__,
-	enable ? "Enable" : "Disable");
 }
 static void msm8x16_ext_spk_delayed_dualmode(u32 enable)
 {
@@ -834,14 +829,11 @@ static void msm8x16_ext_spk_delayed_dualmode(u32 enable)
 static void msm8952_ext_hs_control(u32 enable)
 {
 	gpio_direction_output(headset_gpio, enable);
-	pr_err("%s: %s   headset 111PAs.\n", __func__,
-	enable ? "Enable" : "Disable");
 }
 
 static void msm8952_ext_hs_delay_enable(struct work_struct *work)
 {
 	gpio_direction_output(headset_gpio, true);
-	pr_err("%s:   headset 111PAs.\n", __func__);
 }
 
 extern unsigned char AW87319_Audio_Speaker(void);

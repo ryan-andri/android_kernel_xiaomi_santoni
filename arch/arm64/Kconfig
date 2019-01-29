@@ -321,6 +321,11 @@ config ARCH_MSM8940_XIAOMI_SANTONI
 	depends on ARCH_MSM8940
 	default n
 
+config ARCH_MSM8940_XIAOMI_SANTONI_TREBLE
+	bool "Enable Support Treble XIAOMI Redmi 4X Santoni"
+	depends on ARCH_MSM8940_XIAOMI_SANTONI
+	default n
+
 config ARCH_MSM8953
 	bool "Enable Support for Qualcomm Technologies Inc MSM8953"
 	depends on ARCH_MSM

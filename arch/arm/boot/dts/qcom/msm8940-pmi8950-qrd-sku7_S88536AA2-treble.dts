@@ -88,11 +88,3 @@
 		status="disabled";
 	};
 };
-
-&firmware {
-	android {
-		fstab {
-			/delete-node/ vendor;
-		};
-	};
-};

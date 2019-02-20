@@ -1,0 +1,99 @@
+# SPECTRUM KERNEL MANAGER
+		# Ramdisk file for profile based kernel management
+		# Implimentation inspired by Franco's fku profiles
+		
+		# Initialization
+		on property:sys.boot_completed=1
+		   # Set default profile on first boot
+		   exec u:r:init:s0 root root -- /init.spectrum.sh
+		   exec u:r:su:s0 root root -- /init.spectrum.sh
+		   # Enable Spectrum support
+		   setprop spectrum.support 1
+		
+		   setprop persist.spectrum.kernel Chimera_Redememe3s
+		
+		# Balance (default profile)
+		on property:persist.spectrum.profile=0
+		    # Configure governor settings for big cluster
+		    write /sys/devices/system/cpu/cpu0/online 1
+		    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "darkness"
+		    write /sys/devices/system/cpu/cpu0/cpufreq/darkness/above_hispeed_delay 19000
+		    write /sys/devices/system/cpu/cpu0/cpufreq/darkness/go_hispeed_load 85
+		    write /sys/devices/system/cpu/cpu0/cpufreq/darkness/timer_rate 20000
+		    write /sys/devices/system/cpu/cpu0/cpufreq/darkness/hispeed_freq 960000
+		    write /sys/devices/system/cpu/cpu0/cpufreq/darkness/io_is_busy 0
+		    write /sys/devices/system/cpu/cpu0/cpufreq/darkness/target_loads "45 960000:85"
+		    write /sys/devices/system/cpu/cpu0/cpufreq/darkness/min_sample_time 40000
+		    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 422400
+		    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 1497600
+		
+		    # Configure governor settings for little cluster
+		    write /sys/devices/system/cpu/cpu4/online 1
+		    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor "darkness"
+		    write /sys/devices/system/cpu/cpu4/cpufreq/darkness/above_hispeed_delay 39000
+		    write /sys/devices/system/cpu/cpu4/cpufreq/darkness/go_hispeed_load 85
+		    write /sys/devices/system/cpu/cpu4/cpufreq/darkness/timer_rate 40000
+		    write /sys/devices/system/cpu/cpu4/cpufreq/darkness/hispeed_freq 768000
+		    write /sys/devices/system/cpu/cpu4/cpufreq/darkness/io_is_busy 0
+		    write /sys/devices/system/cpu/cpu4/cpufreq/darkness/target_loads "45 768000:85"
+		    write /sys/devices/system/cpu/cpu4/cpufreq/darkness/min_sample_time 40000
+		    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq 345600
+		    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq 1209600
+		
+		
+		    write /sys/class/kgsl/kgsl-3d0/devfreq/max_freq 500000000
+		    write /sys/class/kgsl/kgsl-3d0/default_pwrlevel 4
+		    write /sys/class/kgsl/kgsl-3d0/devfreq/governor msm-adreno-tz
+		    write /proc/sys/kernel/sched_boost 1
+		
+		# Gaming
+		on property:persist.spectrum.profile=1
+		    # Configure governor settings for big cluster
+		    write /sys/devices/system/cpu/cpu0/online 1
+		    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "interactive"
+		    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay 19000
+		    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load 85
+		    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate 20000
+		    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq 960000
+		    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/io_is_busy 0
+		    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads "1 422400:25 960000:40 1094400:55 1209600:70 1344000:85 1497600:100"
+		    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time 40000
+		    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 960000
+		    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 1497600
+		
+		    # Configure governor settings for little cluster
+		    write /sys/devices/system/cpu/cpu4/online 1
+		    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor "interactive"
+		    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/above_hispeed_delay 39000
+		    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/go_hispeed_load 85
+		    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_rate 40000
+		    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/hispeed_freq 902400
+		    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/io_is_busy 0
+		    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads "1 768000:40 902400:55 998400:70 1094400:85 1209600:100"
+		    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/min_sample_time 40000
+		    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq 768000
+		    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq 1209600
+		
+		    write /sys/class/kgsl/kgsl-3d0/devfreq/max_freq 500000000
+		    write /sys/class/kgsl/kgsl-3d0/default_pwrlevel 2
+		    write /sys/class/kgsl/kgsl-3d0/devfreq/governor msm-adreno-tz
+		    write /proc/sys/kernel/sched_boost 1
+		
+		# Battery
+		on property:persist.spectrum.profile=2
+		    # Configure governor settings for big cluster
+		    write /sys/devices/system/cpu/cpu0/online 1
+		    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "powersave"
+		    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 422400
+		    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 1209600
+		
+		    # Configure governor settings for little cluster
+		    write /sys/devices/system/cpu/cpu4/online 1
+		    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor "powersave"
+		    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq 345600
+		    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq 1094400
+		
+		    write /sys/class/kgsl/kgsl-3d0/devfreq/max_freq 500000000
+		    write /sys/class/kgsl/kgsl-3d0/default_pwrlevel 4
+		    write /sys/class/kgsl/kgsl-3d0/devfreq/governor powersave
+		    write /proc/sys/kernel/sched_boost 0

@@ -11966,3 +11966,4 @@ void dump_cpu_task(int cpu)
 	pr_info("Task dump for CPU %d:\n", cpu);
 	sched_show_task(cpu_curr(cpu));
 }
+int sched_smt_power_savings = 0, sched_mc_power_savings = 2;

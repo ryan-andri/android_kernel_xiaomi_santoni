@@ -636,6 +636,12 @@ config MSM_BCL_PERIPHERAL_CTL
 	  provides routines to configure and monitor the BCL
 	  PMIC peripheral.
 
+config CHARGER_LIMITER
+	bool "charger limiter"
+	default n
+	help
+	  This driver will cut your charging at certain values if enabled.
+
 source "drivers/power/reset/Kconfig"
 
 endif # POWER_SUPPLY

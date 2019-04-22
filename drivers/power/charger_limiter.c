@@ -146,7 +146,7 @@ static int __init charger_limiter_init(void)
 	if (!rc) {
 		INIT_DELAYED_WORK(&charger_limiter_work, charger_limiter_worker);
 		schedule_delayed_work(&charger_limiter_work,
-						msecs_to_jiffies(1000));
+						msecs_to_jiffies(10000));
 	}
 
 	return 0;

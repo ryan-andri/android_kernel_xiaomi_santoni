@@ -1724,7 +1724,11 @@ static DEVICE_ATTR(ftsfwupgradeapp, S_IRUGO|S_IWUSR, ft5x0x_fwupgradeapp_show, f
 
 #if CTP_PROC_INTERFACE
 
+#ifdef CONFIG_ARCH_MSM8940_XIAOMI_SANTONI_TREBLE
+#define FT5X0X_INI_FILEPATH "/vendor/etc/"
+#else
 #define FT5X0X_INI_FILEPATH "/system/vendor/etc/"
+#endif
 
 static int ft5x0x_GetInISize(char *config_name)
 {

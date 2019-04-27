@@ -7178,6 +7178,7 @@ static inline int get_bpd(const char *name)
 #define OTG_PIN_CTRL_RID_DIS		0x04
 #define OTG_CMD_CTRL_RID_EN		0x08
 #define AICL_ADC_BIT			BIT(6)
+#define OTG_CURRENT_REG			SMB_MASK(1, 0)
 static void batt_ov_wa_check(struct smbchg_chip *chip)
 {
 	int rc;
@@ -7633,6 +7634,14 @@ static int smbchg_hw_init(struct smbchg_chip *chip)
 				rc);
 			return rc;
 		}
+	}
+
+	rc = smbchg_sec_masked_write(chip, chip->otg_base + 0xF3,
+			OTG_CURRENT_REG, 0x2);
+	if (rc < 0) {
+		dev_err(chip->dev, "Couldn't set OTG current config rc = %d\n",
+				rc);
+		return rc;
 	}
 
 	if (chip->wa_flags & SMBCHG_BATT_OV_WA)

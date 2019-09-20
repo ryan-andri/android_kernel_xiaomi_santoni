@@ -3985,7 +3985,7 @@ void smbchg_set_calling_current(struct smbchg_chip *chip)
 
 	read_usb_type(chip, &usb_type_name, &usb_supply_type);
 	pr_smb(PR_MISC, "chip->call_state =%d, usb_supply_type =%d\n", chip->call_state, usb_supply_type);
-	if ((chip->call_state == 0)) {
+	if (chip->call_state == 0) {
 		if (usb_supply_type == POWER_SUPPLY_TYPE_USB_DCP)  {
 			pr_smb(PR_MISC, "call_icl_voltage vote 900mA when calling\n");
 			vote(chip->usb_icl_votable, CALL_ICL_VOTER, true, call_current_max);

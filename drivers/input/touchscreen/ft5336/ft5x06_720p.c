@@ -346,7 +346,7 @@ static irqreturn_t ft5x06_ts_interrupt(int irq, void *dev_id)
 	struct ft5x06_ts_data *data = dev_id;
 	struct input_dev *ip_dev;
 	int rc, i;
-	u32 id, x, y, status, num_touches;
+	u32 id, x, y, status, num_touches = 0;
 	u8 reg = 0x00, *buf;
 	bool update_input = false;
 

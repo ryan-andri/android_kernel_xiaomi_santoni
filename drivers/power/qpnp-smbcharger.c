@@ -6631,7 +6631,7 @@ static irqreturn_t batt_warm_handler(int irq, void *_chip)
 }
 
 #define BATT_COOL_CURRENT 900
-#define BATT_COOL_VOLTAGE 0
+#define BATT_COOL_VOLTAGE 5
 static irqreturn_t batt_cool_handler(int irq, void *_chip)
 {
 	struct smbchg_chip *chip = _chip;

@@ -3466,7 +3466,7 @@ otg_get_prop_usbin_voltage_now(struct msm_otg *motg)
 
 	rc = qpnp_vadc_read(motg->vadc_dev, USBIN, &results);
 	if (rc) {
-		pr_err("Unable to read usbin rc=%d\n", rc);
+		pr_debug("Unable to read usbin rc=%d\n", rc);
 		return 0;
 	} else {
 		return results.physical;
